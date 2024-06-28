@@ -193,3 +193,147 @@ export const deleteProduct = (req, res) => {
     });
   });
 };
+
+// Delete multiple products
+export const deleteMultipleProducts = (req, res) => {
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'No product IDs provided',
+    });
+  }
+
+  const query = 'DELETE FROM products WHERE id IN (?)';
+  
+  database.query(query, [ids], (err, result) => {
+    if (err) {
+      console.error('Error deleting products:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to delete products',
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Products deleted successfully',
+    });
+  });
+};
+
+export const getDataCustomer = (req, res) =>{
+
+  database.query("SELECT * FROM customer", (err, rows) => {
+    if (err) {
+      console.error('Error fetching products:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to fetch products data',
+        error: err.message,
+      });
+    }
+    res.json({
+      success: true,
+      message: 'Success fetched products data',
+      data: rows,
+    });
+  });
+}
+
+export const getCustomerById = (req,res) => {
+  const {id} = req.params;
+
+  database.query("SELECT * FROM customer WHERE id = ?", [id], (err,result) => {
+    if (err) {
+      console.error('Error getting customer data: ', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to get customer',
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Successfully get data',
+      data: result
+    });
+  })
+}
+
+export const searchDataCustomer = (req,res) => {
+  const {search} = req.params;
+  console.log(search);
+
+  database.query("SELECT * FROM customer WHERE nama_customer LIKE ?", [`%${search}%`], (err,result) => {
+    if (err) {
+      console.error('Error getting customer data: ', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to get customer',
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Successfully get data',
+      data: result
+    });
+  })
+}
+
+export const editCustomer = (req,res) => {
+  const {namaCustomer,kodeCostumer,noHp,id} = req.body;
+
+  console.log(id);
+
+  database.query("UPDATE customer SET nama_customer = ?, kode_customer = ?, no_hp = ? WHERE id = ?", [namaCustomer, kodeCostumer,noHp, id], (err,result)=> {
+    if (err) {
+      console.error('Error getting customer data: ', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to update data',
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Successfully update data',
+      
+    });
+  })
+}
+
+export const deleteMultipleCustomer = (req, res) => {
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'No Customer IDs provided',
+    });
+  }
+
+  const query = 'DELETE FROM customer WHERE id IN (?)';
+  
+  database.query(query, [ids], (err, result) => {
+    if (err) {
+      console.error('Error deleting Customers:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to delete Customers',
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Customers deleted successfully',
+    });
+  });
+};

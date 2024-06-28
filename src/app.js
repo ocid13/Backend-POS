@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { getProducts, addProduct, getCategories, getUnits, deleteProduct, getProductsWithId } from './handler.js';
+import { getProducts, addProduct, getCategories, getUnits, deleteProduct, deleteMultipleProducts, getDataCustomer, getCustomerById, editCustomer, searchDataCustomer, deleteMultipleCustomer} from './handler.js';
 
 const app = express();
 
@@ -16,5 +16,11 @@ app.get('/categories', getCategories);
 app.get('/categories/:id', getProductsWithId);
 app.get('/units', getUnits);
 app.delete('/products/:id', deleteProduct);
+app.post('/products/delete-multiple', deleteMultipleProducts);
+app.get('/customer', getDataCustomer)
+app.get('/customer/:id', getCustomerById)
+app.get('/customer/search/:search', searchDataCustomer)
+app.post('/customer/edit', editCustomer)
+app.post('/customer/delete-multiple', deleteMultipleCustomer)
 
 export default app;
