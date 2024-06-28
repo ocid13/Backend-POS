@@ -1,0 +1,30 @@
+{
+  "name": "be",
+  "version": "1.0.0",
+  "description": "Beckend dari aplikasi pos",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ocid13/Backend-POS.git"
+  },
+  "author": "Haida Khoirurrosyid",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ocid13/Backend-POS/issues"
+  },
+  "homepage": "https://github.com/ocid13/Backend-POS#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "body-parser": "^1.20.2",
+    "nodemon": "^3.1.4"
+  }
+}
