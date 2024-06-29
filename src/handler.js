@@ -156,3 +156,33 @@ export const deleteProduct = (req, res) => {
     });
   });
 };
+
+// Delete multiple products
+export const deleteMultipleProducts = (req, res) => {
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({
+      success: false,
+      message: 'No product IDs provided',
+    });
+  }
+
+  const query = 'DELETE FROM products WHERE id IN (?)';
+  
+  database.query(query, [ids], (err, result) => {
+    if (err) {
+      console.error('Error deleting products:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to delete products',
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Products deleted successfully',
+    });
+  });
+};
