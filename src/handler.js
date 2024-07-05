@@ -127,38 +127,40 @@ export const getUnits = (req, res) => {
   });
 };
 
-// Delete product
-export const deleteProduct = (req, res) => {
-  const { id } = req.params;
+// Search products
+export const searchProducts = (req, res) => {
+  const { search } = req.params;
 
-  const query = 'DELETE FROM products WHERE id = ?';
-  
-  database.query(query, [id], (err, result) => {
+  const query = `
+    SELECT p.id, p.product_name, p.product_code, p.barcode, p.category, p.unit, p.selling_price, p.cost_of_product, p.product_initial_qty,
+           c.category, u.unit
+    FROM products p
+    LEFT JOIN categories c ON p.category = c.id
+    LEFT JOIN units u ON p.unit = u.id
+    WHERE p.product_name LIKE ?
+  `;
+  const values = [`%${search}%`];
+
+  database.query(query, values, (err, result) => {
     if (err) {
-      console.error('Error deleting product:', err);
+      console.error('Error fetching search results:', err);
       return res.status(500).json({
         success: false,
-        message: 'Failed to delete product',
+        message: 'Failed to fetch search results',
         error: err.message,
-      });
-    }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'Product not found',
       });
     }
 
     res.json({
       success: true,
-      message: 'Product deleted successfully',
+      message: 'Successfully fetched search results',
+      data: result,
     });
   });
 };
 
-// Delete multiple products
-export const deleteMultipleProducts = (req, res) => {
+// Delete product(s)
+export const deleteProducts = (req, res) => {
   const { ids } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.length === 0) {

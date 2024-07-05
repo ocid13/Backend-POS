@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { getProducts, addProduct, getCategories, getUnits, deleteProduct, deleteMultipleProducts } from './handler.js';
+import { getProducts, addProduct, getCategories, getUnits, deleteProducts, searchProducts } from './handler.js';
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.get('/products', getProducts);
 app.post('/products/add', addProduct);
 app.get('/categories', getCategories);
 app.get('/units', getUnits);
-app.delete('/products/:id', deleteProduct);
-app.post('/products/delete-multiple', deleteMultipleProducts);
+app.post('/products/delete', deleteProducts);
+app.get('/products/search/:search', searchProducts);
 
 export default app;
