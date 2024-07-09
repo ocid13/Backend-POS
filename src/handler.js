@@ -188,3 +188,98 @@ export const deleteProducts = (req, res) => {
     });
   });
 };
+
+// Fetch single product by ID
+export const getProductById = (req, res) => {
+  const { id } = req.params;
+
+  const query = `
+    SELECT p.id, p.product_name, p.product_code, p.barcode, p.category, p.unit, p.selling_price, p.cost_of_product, p.product_initial_qty,
+           c.category, u.unit
+    FROM products p
+    LEFT JOIN categories c ON p.category = c.id
+    LEFT JOIN units u ON p.unit = u.id
+    WHERE p.id = ?
+  `;
+  
+  database.query(query, [id], (err, rows) => {
+    if (err) {
+      console.error('Error fetching product:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to fetch product',
+        error: err.message,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Successfully fetched product',
+      data: rows,
+    });
+  });
+};
+
+export const editProducts = (req, res) => {
+  const {
+    id,
+    product_name,
+    product_code,
+    barcode,
+    category,
+    unit,
+    selling_price,
+    cost_of_product,
+    product_initial_qty,
+  } = req.body;
+
+  const query = `
+    UPDATE products SET
+      product_name = ?,
+      product_code = ?,
+      barcode = ?,
+      category = ?,
+      unit = ?,
+      selling_price = ?,
+      cost_of_product = ?,
+      product_initial_qty = ?
+    WHERE id = ?
+  `;
+  const values = [
+    product_name,
+    product_code,
+    barcode,
+    category,
+    unit,
+    selling_price,
+    cost_of_product,
+    product_initial_qty,
+    id
+  ];
+
+  database.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error updating product:', err);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to update product',
+        error: err.message,
+      });
+    }
+    res.json({
+      success: true,
+      message: 'Product updated successfully',
+      data: {
+        id,
+        product_name,
+        product_code,
+        barcode,
+        category,
+        unit,
+        selling_price,
+        cost_of_product,
+        product_initial_qty,
+      },
+    });
+  });
+}
